@@ -45,6 +45,7 @@
 
       button {
         margin-top: 12px;
+        margin-right: 8px;
         min-height: 42px;
         border: 0;
         border-radius: 6px;
@@ -65,20 +66,28 @@
   <body>
     <main>
       <h1>Autorização recebida</h1>
-      <p>Copie a URL abaixo e cole no ERP, na aba Conexão, em Finalizar com código de retorno.</p>
+      <p>Vou voltar para o ERP automaticamente. Se isso não acontecer, use os botões abaixo.</p>
       <textarea id="callbackUrl" readonly></textarea>
+      <button id="openErpBtn">Voltar para o ERP</button>
       <button id="copyBtn">Copiar URL</button>
       <div class="status" id="status"></div>
     </main>
     <script>
       const callbackUrl = window.location.href;
+      const erpUrl = `http://localhost:4340/?mlCallback=${encodeURIComponent(callbackUrl)}`;
       const field = document.querySelector("#callbackUrl");
       const status = document.querySelector("#status");
       field.value = callbackUrl;
+      document.querySelector("#openErpBtn").addEventListener("click", () => {
+        window.location.href = erpUrl;
+      });
       document.querySelector("#copyBtn").addEventListener("click", async () => {
         await navigator.clipboard.writeText(callbackUrl);
         status.textContent = "URL copiada.";
       });
+      window.setTimeout(() => {
+        window.location.href = erpUrl;
+      }, 1200);
     </script>
   </body>
 </html>
